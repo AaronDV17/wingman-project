@@ -1,2 +1,6 @@
-raw_data/
 .python-version
+notebooks/data/
+notebooks/archive/
+raw_data/
+typora/
+```
