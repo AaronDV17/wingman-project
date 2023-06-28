@@ -1,6 +1,7 @@
-.python-version
-notebooks/data/
-notebooks/archive/
 raw_data/
+.python-version
+
+notebooks/
 typora/
+data/
 ```
