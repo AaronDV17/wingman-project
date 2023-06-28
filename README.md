@@ -1,17 +1,18 @@
-Wingman was conceptualised by Aaron de Vroeden and is being implemented in collaboartion with his classmates Given Kibanza, Leo Steenkamp, Daniel Derbyshire and Saraja Gantner.
+Wingman was conceptualised by Aaron de Vroede and is being implemented in collaboration with his classmates Given Kibanza, Leo Steenkamp, Daniel Derbyshire and Saraja Gantner.
+
 It is the final project of Le Wagon's Data Science Batch #1266.
 
 # Problem
 - There are many potential unforeseen abnormalities or complications during the course of a flight which can lead to devastating losses of human life if the flight crew are not fully prepared for the situation.
 
-- Pilots currently rely on standard operating procedures (SOP’s), Evidence-Based Training (EBT) & personal experience to avoid incidents / accidents from developing.
+- Pilots currently rely on standard operating procedures (SOP’s), Evidence-Based Training (EBT) & personal experience to avoid incidents/accidents from developing.
 
 - However… No flight is ever the same and always carries with it a unique set of potential hazards & risks which may be overlooked.
 
 # Solution
 - A prediction-based tool could be built by potentially using a multiclass classification model to provide invaluable predictions on the most likely emergency scenarios that may be encountered for a flight with a given set of details.
 
-- This would be based off of the analysis of a extensive dataset of features associated with past incidents & accidents.
+- This would be based on the analysis of an extensive dataset of features associated with past incidents & accidents.
 
 # Data Source
 - The National Transportation Safety Board (NTSB) provides an extensive database of past incidents & accidents from the start of 2008 to the end of May 2023.
