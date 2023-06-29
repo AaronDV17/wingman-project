@@ -9,7 +9,7 @@ from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
 def preprocess_features(X: pd.DataFrame) -> np.ndarray:
     def create_sklearn_preprocessor() -> ColumnTransformer:
 
-        #
+        # create pipelines for each field where the values are both encoded and
 
         # COMBINED PREPROCESSOR
         final_preprocessor = ColumnTransformer(
