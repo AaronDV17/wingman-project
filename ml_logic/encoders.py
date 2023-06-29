@@ -3,28 +3,30 @@ import numpy as np
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
 
-def transform_yes_no(X: pd.DataFrame) -> np.ndarray:
-    """Transforms the 'yes' and 'no' values to 1 and 0 respectively."""
+def transform_yes_no(X: pd.DataFrame) -> pd.DataFrame:
+    """Transforms the 'Y' and 'N' values to 1 and 0 respectively."""
+    X = X.replace({'Y': 1, 'N': 0}, inplace=True)
+    return X
 
-    yn_categories = ["N", "Y"]
-    bin_encoder_1 = OrdinalEncoder(categories=[yn_categories])
-
-    return bin_encoder_1.fit_transform(X)
-
-def transform_gender(X: pd.DataFrame) -> np.ndarray:
+def transform_gender(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms 'M" and 'F' values to 1 and 0 respectively."""
-
-    mf_categories = ["M", "F"]
-    bin_encoder_2 = OrdinalEncoder(categories=[mf_categories])
-
-    return bin_encoder_2.fit_transform(X)
+    X = X.replace({'M': 1, 'F': 0}, inplace=True)
+    return X
 
 def transform_type_insp(X: pd.DataFrame) -> np.ndarray:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
-    ohe = OneHotEncoder(sparse_output=False, drop='if_binary')
+    # Replace 'UNK' with 'ANNL' in the 'type_last_insp' column
+    X.replace({'type_last_insp': {'UNK': 'ANNL'}}, inplace=True)
 
-    return ohe.fit_transform(X)
+    ohe = OneHotEncoder(sparse=False, drop='if_binary').fit(X[['type_last_insp']])
+    type_insp_encoded = ohe.transform(X[['type_last_insp']])
+
+    type_insp_encoded_df = pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names_out())
+
+    X[ohe.get_feature_names_out()] = ohe.transform(X[['type_last_insp']])
+    X.drop(columns=['type_last_insp'], inplace=True)
+    return X
 
 def transform_type_fly(X: pd.DataFrame) -> np.ndarray:
     """Transforms type_fly using Custom function."""
@@ -69,8 +71,13 @@ def transform_far_part(X: pd.DataFrame) -> pd.DataFrame:
 
     ohe_far_part = OneHotEncoder(sparse_output=False, min_frequency=300).fit(X[['far_part']])
     far_part_encoded = ohe_far_part.transform(X[['far_part']])
+
     far_part_encoded_df = pd.DataFrame(far_part_encoded, columns=ohe_far_part.get_feature_names_out())
-    return far_part_encoded_df
+
+    X = pd.merge(X, far_part_encoded_df, left_index=True, right_index=True)
+    X.drop(columns=['far_part'], inplace=True)
+
+    return X
 
 def transform_acft_make(X: pd.DataFrame) -> np.ndarray:
     """Transforms acft_make using Custom functions and OHE."""
@@ -175,6 +182,10 @@ def transform_dprt_dest_apt_id(X: pd.DataFrame) -> np.ndarray:
 
     return X.to_numpy()
 
+def transform_flt_plan_filed(X: pd.DataFrame) -> pd.DataFrame:
+    """Transforms transform_flt_plan_filed using Custom functions."""
+
+    return X
 
 def transform_pc_professional(X: pd.DataFrame) -> np.ndarray:
     """Transforms pc_professional using Custom functions."""
