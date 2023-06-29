@@ -1,5 +1,7 @@
 raw_data/
-.python-version
+data/
 
 typora/
-data/
+notebooks-pvt/
+
+.python-version
