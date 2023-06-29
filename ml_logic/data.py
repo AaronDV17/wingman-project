@@ -17,17 +17,21 @@ def clean_data(X: pd.DataFrame) -> pd.DataFrame:
     ## drop duplicates
     wingman_data = X.drop_duplicates()
 
+    ## Filter out rows to only contain 'HP' values in 'hp_or_lbs' column
+    mask = wingman_df['hp_or_lbs'] == 'HP'
+    wingman_df = wingman_df[mask]
+
     ## drop rows and columns
     wingman_data_cleaned = wingman_data.dropna(subset=['acft_make', 'acft_model', 'acft_category'], how='any')
+
     wingman_data_cleaned.drop([
         'afm_hrs_last_insp', 'elt_install', 'elt_type', 'oper_dba', 'crew_tox_perf', 'mr_faa_med_certf', 'eng_model',
-        'propeller_type', 'available_restraint', 'eng_no'
+        'propeller_type', 'available_restraint', 'eng_no', 'hp_or_lbs'
         ], axis=1, inplace=True)
-
 
     ## imputing
     features_numeric_1 = ['dprt_time']
-    features_numeric_2 = ['cert_max_gr_wt', 'afm_hrs', 'total_seats']
+    features_numeric_2 = ['cert_max_gr_wt', 'afm_hrs', 'total_seats', 'power_units']
     features_cat = ['num_eng', 'type_last_insp', 'second_pilot', 'site_seeing', 'air_medical', 'crew_sex']
     features_certs = ['certs_held']
     features_5 = ['dprt_apt_id', 'dest_apt_id', 'flt_plan_filed']
