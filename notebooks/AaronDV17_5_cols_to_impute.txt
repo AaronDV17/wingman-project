@@ -1,0 +1,34 @@
+
+mr_faa_med_certf       98.6 - Drop
+oper_dba               94.5 - Drop
+afm_hrs_last_insp      65.8 - Drop
+propeller_type         58.9 - Drop
+available_restraint    44.3 - Drop
+elt_type               41.4 - Drop
+dest_apt_id            19.5 - Impute / 'NONE'
+carb_fuel_injection    19.5 - Impute / 'UNK'
+dprt_time              19.3 - Impute / Mean
+afm_hrs                17.3 - Impute / Median
+crew_sex               17.1 - Impute / Mode
+cert_max_gr_wt         16.5 - Impute / Median
+dprt_apt_id            12.6 - Impute / 'NONE'
+elt_install            10.5 - Drop
+crew_tox_perf           8.5 - Drop
+hp_or_lbs               8.3 - Mask (Keep only HP), then Drop
+type_last_insp          7.7 - Impute / Mode
+power_units             7.3 - Impute / Median
+total_seats             7.1 - Impute / Median
+second_pilot            6.0 - Impute / Mode
+type_fly                5.8 - Impute / 'UNK'
+pc_profession           3.2 - Impute / 'UNK'
+certs_held              2.2 - Impute / 'N'
+num_eng                 2.1 - Impute / Mode
+eng_model               1.2 - Drop
+flt_plan_filed          1.0 - Impute / 'NONE'
+eng_mfgr                0.6 - Impute / 'UNK'
+eng_type                0.4 - Impute / 'UNK'
+air_medical             0.1 - Impute / Mode
+site_seeing             0.1 - Impute / Mode
+acft_make                 1 - Mask (Drop if null)
+acft_category             1 - Mask (Drop if null)
+acft_model                1 - Mask (Drop if null)
