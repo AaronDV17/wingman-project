@@ -37,8 +37,10 @@ def transform_type_fly(X: pd.DataFrame) -> pd.DataFrame:
 
     return type_fly_encoded
 
-def general_encoder(X: pd.DataFrame, column: str, min_frequency: int = 100) -> np.ndarray:
-    pass
+def general_encoder(X: pd.DataFrame, feature: str, min_frequency=None, max_categories=None) -> np.ndarray:
+    ohe = OneHotEncoder(sparse_output=False, min_frequency=min_frequency, max_categories=max_categories).fit(X[[feature]])
+    feature_encoded = ohe.transform(X[[feature]])
+    return feature_encoded
 
 def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_mfgr using Custom function."""
