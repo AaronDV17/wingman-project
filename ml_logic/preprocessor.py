@@ -4,26 +4,19 @@ import pandas as pd
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
+from encoders import transform_far_part
 
 
-def preprocess_features(X: pd.DataFrame) -> np.ndarray:
-    def create_sklearn_preprocessor() -> ColumnTransformer:
+def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
+    """Preprocesses the features of the cleaned dataset."""
 
-        # create pipelines for each field where the values are both encoded and
+    # far_part
+    X = pd.merge(X, transform_far_part(X), left_index=True, right_index=True)
+    X.drop(columns=['far_part'], inplace=True)
 
-        # COMBINED PREPROCESSOR
-        final_preprocessor = ColumnTransformer(
-            [
-                # ("passenger_scaler", passenger_pipe, ["passenger_count"]),
-                # ("time_preproc", time_pipe, ["pickup_datetime"]),
-                # ("dist_preproc", distance_pipe, lonlat_features),
-                # ("geohash", geohash_pipe, lonlat_features),
-            ],
-            n_jobs=-1,
-        )
+    # next encoder
+    X = X
+    X.drop()
 
-        return final_preprocessor
-
-    preprocessor = create_sklearn_preprocessor()
-    X_processed = preprocessor.fit_transform(X)
+    X_processed = X.copy()
     return X_processed

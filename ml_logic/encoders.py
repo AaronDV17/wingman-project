@@ -64,12 +64,13 @@ def transform_eng_mfgr(X: pd.DataFrame) -> np.ndarray:
 
     return eng_mfgr_enc
 
-def transform_far_part(X: pd.DataFrame) -> np.ndarray:
+def transform_far_part(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms far_part using OHE."""
 
     ohe_far_part = OneHotEncoder(sparse_output=False, min_frequency=300).fit(X[['far_part']])
     far_part_encoded = ohe_far_part.transform(X[['far_part']])
-    return far_part_encoded
+    far_part_encoded_df = pd.DataFrame(far_part_encoded, columns=ohe_far_part.get_feature_names_out())
+    return far_part_encoded_df
 
 def transform_acft_make(X: pd.DataFrame) -> np.ndarray:
     """Transforms acft_make using Custom functions and OHE."""
