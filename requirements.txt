@@ -7,3 +7,5 @@ pandas
 matplotlib
 seaborn
 scikit-learn
+google-cloud-bigquery
+google-cloud-storages
