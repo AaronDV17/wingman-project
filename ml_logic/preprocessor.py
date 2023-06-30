@@ -18,12 +18,10 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     crew_sex = transform_gender(X[['crew_sex']])
 
-    # transform_type_insp -G
     type_last_insp = transform_type_insp(X[['type_last_insp']])
 
     type_fly = transform_type_fly(X[['type_fly']])
 
-    # transform_eng_mfgr -
     eng_mfgr = transform_eng_mfgr(X[['eng_mfgr']])
 
     far_part = transform_far_part(X[['far_part']])
@@ -32,17 +30,14 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     fixed_retractable = transform_fixed_retractable(X[['fixed_retractable']])
 
-    # transform_acft_category -G
     acft_category = transform_acft_category(X[['acft_category']])
 
     homebuilt = transform_yes_no(X[['homebuilt']])
 
     crew_cat = transform_crew_category(X[['crew_category']])
 
-    # transform_eng_type -L
     eng_type = transform_eng_type(X[['eng_type']])
 
-    # transform_carb_fuel_injection -L
     carb_fuel_injection = transform_carb_fuel_injection(X[['carb_fuel_injection']])
 
     # transform_dprt_dest_apt_id -L
@@ -60,9 +55,11 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
         air_medical,
         crew_sex,
         type_fly,
+        far_part,
         acft_make,
         fixed_retractable,
         homebuilt,
+        crew_cat,
         type_last_insp,
         eng_mfgr,
         acft_category,
