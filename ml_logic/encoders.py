@@ -68,9 +68,13 @@ def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
 def transform_far_part(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms far_part using OHE."""
 
-    ohe_far_part = OneHotEncoder(sparse_output=False, min_frequency=300).fit(X[['far_part']])
-    far_part_encoded = ohe_far_part.transform(X[['far_part']])
-    return far_part_encoded
+    ohe_far_part = OneHotEncoder(sparse_output=False, min_frequency=300).fit(X)
+    far_part_encoded = ohe_far_part.transform(X)
+
+    far_part_encoded_df = pd.DataFrame(far_part_encoded, columns=ohe_far_part.get_feature_names_out())
+    far_part_encoded_df.index = X.index
+
+    return far_part_encoded_df
 
 def transform_acft_make(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms acft_make using Custom functions and OHE."""
@@ -147,10 +151,15 @@ def transform_homebuilt(X: pd.DataFrame) -> pd.DataFrame:
 def transform_crew_category(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms crew_category using Custom functions and OHE."""
 
-    X[['crew_category']] = X[['crew_category']].replace({'KPLT':'PLT', 'CPLT':'PLT'})
-    ohe_crew_category = OneHotEncoder(sparse_output=False).fit(X[['crew_category']])
-    crew_category_encoded = ohe_crew_category.transform(X[['crew_category']])
-    return crew_category_encoded
+    X = X.replace({'KPLT':'PLT', 'CPLT':'PLT'})
+
+    ohe_crew_cat = OneHotEncoder(sparse_output=False).fit(X)
+    crew_cat_enc = ohe_crew_cat.transform(X)
+
+    crew_cat_enc_df = pd.DataFrame(crew_cat_enc, columns=ohe_crew_cat.get_feature_names_out())
+    crew_cat_enc_df.index = X.index
+
+    return crew_cat_enc_df
 
 def transform_eng_type(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_type using OHE."""

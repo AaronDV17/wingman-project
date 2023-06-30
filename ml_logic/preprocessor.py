@@ -24,19 +24,17 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     # transform_eng_mfgr -G
 
-    X = transform_far_part(X[['far_part']])
+    far_part = transform_far_part(X[['far_part']])
 
-    # transform_acft_make -G
     acft_make = transform_acft_make(X[['acft_make']])
 
-    # transform_fixed_retractable -G
     fixed_retractable = transform_fixed_retractable(X[['fixed_retractable']])
 
     # transform_acft_category -G
 
     homebuilt = transform_yes_no(X[['homebuilt']])
 
-    # transform_crew_category -A
+    crew_cat = transform_crew_category(X[['crew_category']])
 
     # transform_eng_type -L
 
@@ -50,16 +48,22 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
 
 
-    X_processed = pd.concat([
-        certs_held,
-        second_pilot,
-        site_seeing,
-        air_medical,
-        crew_sex,
-        type_fly,
-        acft_make,
-        fixed_retractable,
-        homebuilt
-    ], axis=1)
+    X_processed = pd.concat(
+        [
+            certs_held,
+            second_pilot,
+            site_seeing,
+            air_medical,
+            crew_sex,
+            type_fly,
+            far_part,
+            acft_make,
+            fixed_retractable,
+            homebuilt,
+            crew_cat,
+        ],
+        axis=1
+    )
+
 
     return X_processed
