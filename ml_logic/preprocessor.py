@@ -50,6 +50,28 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     pc_profession = transform_pc_profession(X[['pc_profession']])
 
+    # X.drop([
+    #     'certs_held',
+    #     'second_pilot',
+    #     'site_seeing',
+    #     'air_medical',
+    #     'crew_sex',
+    #     'type_last_insp',
+    #     'type_fly',
+    #     'eng_mfgr',
+    #     'far_part',
+    #     'acft_make',
+    #     'fixed_retractable',
+    #     'acft_category',
+    #     'homebuilt',
+    #     'crew_cat',
+    #     'eng_type',
+    #     'carb_fuel_injection',
+    #     'dprt_apt_id',
+    #     'dest_apt_id',
+    #     'flt_plan_filed',
+    #     'pc_profession',
+    # ], axis=1, inplace=True)
 
     X_processed = pd.concat([
         certs_held,

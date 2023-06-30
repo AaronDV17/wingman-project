@@ -232,6 +232,12 @@ def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
 def transform_dprt_dest_apt_id(X: pd.DataFrame, field: str) -> pd.DataFrame:
     """Transforms certs_held using Custom functions."""
 
+    # condition_1 = (X[field] == 'NONE') | (X[field] == 'PVT')
+    # X.loc[condition_1, field] = 0
+
+    # condition_2 = (X[field] != 0)
+    # X.loc[condition_2, field] = 1
+
     X[field] = X[field].apply(lambda x: 0 if x in ['NONE', 'PVT'] else 1)
 
     return X
@@ -240,8 +246,8 @@ def transform_dprt_dest_apt_id(X: pd.DataFrame, field: str) -> pd.DataFrame:
 def transform_pc_profession(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms pc_profession using Custom functions."""
 
-    X['pc_profession'].replace('UNK', 'No', inplace=True)
-    X['pc_profession'].replace(['Yes', 'No'], [1, 0], inplace=True)
+    X['pc_profession'] = X['pc_profession'].replace('UNK', 'No')
+    X['pc_profession'] = X['pc_profession'].replace(['Yes', 'No'], [1, 0])
 
     return X
 
