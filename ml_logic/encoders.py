@@ -24,8 +24,10 @@ def transform_type_insp(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
     ohe = OneHotEncoder(sparse_output=False, drop='if_binary')
+    ohe.fit(X)
+    type_insp_encoded = ohe.transform(X)
 
-    return ohe.fit_transform(X)
+    return pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names())
 
 def transform_type_fly(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms type_fly using Custom function."""
@@ -43,7 +45,7 @@ def general_encoder(X, feature: str, drop=None, min_frequency=None, max_categori
 
     ohe = OneHotEncoder(sparse_output=False, drop=drop, min_frequency=min_frequency, max_categories=max_categories).fit(X[[feature]])
     feature_encoded = ohe.transform(X[[feature]])
-    return feature_encoded
+    return pd.DataFrame(feature_encoded, columns=ohe.get_feature_names())
 
 def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_mfgr using Custom function."""
