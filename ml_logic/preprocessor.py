@@ -50,30 +50,24 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     pc_profession = transform_pc_profession(X[['pc_profession']])
 
-    # X.drop([
-    #     'certs_held',
-    #     'second_pilot',
-    #     'site_seeing',
-    #     'air_medical',
-    #     'crew_sex',
-    #     'type_last_insp',
-    #     'type_fly',
-    #     'eng_mfgr',
-    #     'far_part',
-    #     'acft_make',
-    #     'fixed_retractable',
-    #     'acft_category',
-    #     'homebuilt',
-    #     'crew_cat',
-    #     'eng_type',
-    #     'carb_fuel_injection',
-    #     'dprt_apt_id',
-    #     'dest_apt_id',
-    #     'flt_plan_filed',
-    #     'pc_profession',
-    # ], axis=1, inplace=True)
+    num_eng = X[['num_eng']]
+    total_seats = X[['total_seats']]
+    afm_hrs = X[['afm_hrs']]
+    cert_max_gr_wt = X[['cert_max_gr_wt']]
+    dprt_time = X[['dprt_time']]
+    power_units = X[['power_units']]
+    flight_hours_mean = X[['flight_hours_mean']]
+    eventsoe_no = X[['eventsoe_no']]
 
     X_processed = pd.concat([
+        num_eng,
+        total_seats,
+        afm_hrs,
+        cert_max_gr_wt,
+        dprt_time,
+        power_units,
+        flight_hours_mean,
+        eventsoe_no,
         certs_held,
         second_pilot,
         site_seeing,
