@@ -41,11 +41,13 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
     carb_fuel_injection = transform_carb_fuel_injection(X[['carb_fuel_injection']])
 
     # transform_dprt_dest_apt_id -L
+    dprt_dest_apt_id = transform_dprt_dest_apt_id(X[['dprt_dest_apt_id']])
 
     # transform_flt_plan_filed -L
+    flt_plan_filed = transform_flt_filed(X[['flt_plan_filed']])
 
     # transform_pc_professional -L
-
+    pc_profession = transform_pc_profession(X[['pc_profession']])
 
 
     X_processed = pd.concat([
@@ -65,6 +67,9 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
         acft_category,
         eng_type,
         carb_fuel_injection,
+        dprt_dest_apt_id,
+        flt_plan_filed,
+        pc_profession
     ], axis=1)
 
     return X_processed
