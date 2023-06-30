@@ -172,7 +172,7 @@ def transform_dprt_dest_apt_id(X: pd.DataFrame) -> np.ndarray:
     X.loc[X['dest_apt_id'] == 'NONE', 'dest_apt_id'], X.loc[X['dest_apt_id'] == 'PVT', 'dest_apt_id'] = 0, 0 # None and PVT -> 0
     X.loc[X['dest_apt_id'] !=0, 'dest_apt_id'] = 1 # values != 0 -> 1
 
-    return X.to_numpy()
+    return X
 
 
 def transform_pc_professional(X: pd.DataFrame) -> np.ndarray:
@@ -181,4 +181,22 @@ def transform_pc_professional(X: pd.DataFrame) -> np.ndarray:
     X['pc_profession'].replace('UNK', 'No', inplace=True)
     X['pc_profession'].replace(['Yes', 'No'], [1, 0], inplace=True)
 
-    return X.to_numpy()
+    return X
+
+def transform_flt_filed(df):
+    df['flt_plan_filed'].replace('UNK', 'NONE', inplace=True)
+    df['flt_plan_filed'].replace('VFIF', 'IFR', inplace=True)
+    df['flt_plan_filed'].replace(['CVFR', 'MVFR'], 'VFR', inplace=True)
+
+    cat = list(df['flt_plan_filed'].unique())
+
+    ohe = OneHotEncoder()
+    ohe_df = pd.DataFrame(ohe.fit_transform(df[['flt_plan_filed']]).toarray())
+    ohe_df.columns = cat
+    ohe_df
+    df.drop(columns='flt_plan_filed', inplace=True)
+    df = pd.concat([df, ohe_df], axis=1)
+
+    df['pc_profession'].replace('UNK', 'No', inplace=True)
+    df['pc_profession'].replace(['Yes', 'No'], [1, 0], inplace=True)
+    return df
