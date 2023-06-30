@@ -3,30 +3,33 @@ import numpy as np
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
 
-def transform_yes_no(X: pd.DataFrame) -> np.ndarray:
+def transform_yes_no(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms the 'yes' and 'no' values to 1 and 0 respectively."""
 
     yn_categories = ["N", "Y"]
     bin_encoder_1 = OrdinalEncoder(categories=[yn_categories])
 
-    return bin_encoder_1.fit_transform(X)
 
-def transform_gender(X: pd.DataFrame) -> np.ndarray:
+    return pd.DataFrame(bin_encoder_1.fit_transform(X), columns=X.columns)
+
+def transform_gender(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms 'M" and 'F' values to 1 and 0 respectively."""
 
     mf_categories = ["M", "F"]
     bin_encoder_2 = OrdinalEncoder(categories=[mf_categories])
 
-    return bin_encoder_2.fit_transform(X)
+    return pd.DataFrame(bin_encoder_2.fit_transform(X), columns=X.columns)
 
-def transform_type_insp(X: pd.DataFrame) -> np.ndarray:
+def transform_type_insp(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
     ohe = OneHotEncoder(sparse_output=False, drop='if_binary')
+    ohe.fit(X)
+    type_insp_encoded = ohe.transform(X)
 
-    return ohe.fit_transform(X)
+    return pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names())
 
-def transform_type_fly(X: pd.DataFrame) -> np.ndarray:
+def transform_type_fly(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms type_fly using Custom function."""
 
     wingman_data_enc = X
@@ -35,16 +38,16 @@ def transform_type_fly(X: pd.DataFrame) -> np.ndarray:
     type_fly_encoded = pd.get_dummies(wingman_data_enc, columns=[''], dtype=int)
     type_fly_encoded = type_fly_encoded.drop(columns = ['type_fly', 'eng_mfgr'])
 
-    return type_fly_encoded.to_numpy()
+    return type_fly_encoded
 
 def general_encoder(X, feature: str, drop=None, min_frequency=None, max_categories=None) -> np.array:
     """Transforms a feature using OHE."""
 
     ohe = OneHotEncoder(sparse_output=False, drop=drop, min_frequency=min_frequency, max_categories=max_categories).fit(X[[feature]])
     feature_encoded = ohe.transform(X[[feature]])
-    return feature_encoded
+    return pd.DataFrame(feature_encoded, columns=ohe.get_feature_names())
 
-def transform_eng_mfgr(X: pd.DataFrame) -> np.ndarray:
+def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_mfgr using Custom function."""
 
     eng_mfgr = X
@@ -64,14 +67,14 @@ def transform_eng_mfgr(X: pd.DataFrame) -> np.ndarray:
 
     return eng_mfgr_enc
 
-def transform_far_part(X: pd.DataFrame) -> np.ndarray:
+def transform_far_part(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms far_part using OHE."""
 
     ohe_far_part = OneHotEncoder(sparse_output=False, min_frequency=300).fit(X[['far_part']])
     far_part_encoded = ohe_far_part.transform(X[['far_part']])
     return far_part_encoded
 
-def transform_acft_make(X: pd.DataFrame) -> np.ndarray:
+def transform_acft_make(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms acft_make using Custom functions and OHE."""
 
     # lists for replacements
@@ -119,31 +122,31 @@ def transform_acft_make(X: pd.DataFrame) -> np.ndarray:
     # one hot encoding with min_frequency=500
     ohe_acft_make = OneHotEncoder(sparse_output=False, min_frequency=162).fit(X[['acft_make']])
     acft_make_encoded = ohe_acft_make.transform(X[['acft_make']])
-    return acft_make_encoded
+    return pd.DataFrame(acft_make_encoded, columns=ohe_acft_make.get_feature_names_out())
 
-def transform_fixed_retractable(X: pd.DataFrame) -> np.ndarray:
+def transform_fixed_retractable(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms fixed_retractable using OHE."""
 
     ohe_fixed_retractable = OneHotEncoder(sparse_output=False, drop='if_binary').fit(X[['fixed_retractable']])
     fixed_retractable_encoded = ohe_fixed_retractable.transform(X[['fixed_retractable']])
-    return fixed_retractable_encoded
+    return pd.DataFrame(fixed_retractable_encoded, columns=ohe_fixed_retractable.get_feature_names_out())
 
-def transform_acft_category(X: pd.DataFrame) -> np.ndarray:
+def transform_acft_category(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms acft_category using OHE."""
 
     ohe_acft_category = OneHotEncoder(sparse_output=False, min_frequency=1000).fit(X[['acft_category']])
     acft_category_encoded = ohe_acft_category.transform(X[['acft_category']])
     return acft_category_encoded
 
-def transform_homebuilt(X: pd.DataFrame) -> np.ndarray:
+def transform_homebuilt(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms homebuilt using OHE."""
 
     ohe_homebuilt = OneHotEncoder(sparse_output=False, drop='if_binary').fit(X[['homebuilt']])
     homebuilt_encoded = ohe_homebuilt.transform(X[['homebuilt']])
-    return homebuilt_encoded
+    return pd.DataFrame(homebuilt_encoded, columns=ohe_homebuilt.get_feature_names_out())
 
 
-def transform_crew_category(X: pd.DataFrame) -> np.ndarray:
+def transform_crew_category(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms crew_category using Custom functions and OHE."""
 
     X[['crew_category']] = X[['crew_category']].replace({'KPLT':'PLT', 'CPLT':'PLT'})
@@ -151,22 +154,22 @@ def transform_crew_category(X: pd.DataFrame) -> np.ndarray:
     crew_category_encoded = ohe_crew_category.transform(X[['crew_category']])
     return crew_category_encoded
 
-def transform_eng_type(X: pd.DataFrame) -> np.ndarray:
+def transform_eng_type(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_type using OHE."""
 
     ohe_eng_type = OneHotEncoder(sparse_output=False, min_frequency=500).fit(X[['eng_type']])
     eng_type_encoded = ohe_eng_type.transform(X[['eng_type']])
-    return eng_type_encoded
+    return pd.DataFrame(eng_type_encoded, columns=ohe_eng_type.get_feature_names_out())
 
-def transform_carb_fuel_injection(X: pd.DataFrame) -> np.ndarray:
+def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms carb_fuel_injection using OHE."""
 
     ohe_carb_fuel_injection = OneHotEncoder(sparse_output=False).fit(X[['carb_fuel_injection']])
     carb_fuel_injection_encoded = ohe_carb_fuel_injection.transform(X[['carb_fuel_injection']])
 
-    return carb_fuel_injection_encoded
+    return pd.DataFrame(carb_fuel_injection_encoded, columns=ohe_carb_fuel_injection.get_feature_names_out())
 
-def transform_dprt_dest_apt_id(X: pd.DataFrame) -> np.ndarray:
+def transform_dprt_dest_apt_id(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms certs_held using Custom functions."""
 
     X.loc[X['dest_apt_id'] == 'NONE', 'dest_apt_id'], X.loc[X['dest_apt_id'] == 'PVT', 'dest_apt_id'] = 0, 0 # None and PVT -> 0
@@ -175,7 +178,7 @@ def transform_dprt_dest_apt_id(X: pd.DataFrame) -> np.ndarray:
     return X
 
 
-def transform_pc_professional(X: pd.DataFrame) -> np.ndarray:
+def transform_pc_professional(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms pc_professional using Custom functions."""
 
     X['pc_profession'].replace('UNK', 'No', inplace=True)

@@ -4,37 +4,48 @@ import pandas as pd
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
-from encoders import transform_yes_no, transform_gender, transform_type_insp, transform_far_part
+from encoders import *
 
 
 def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses the features of the cleaned dataset."""
 
-    # transform_yes_no -G
+    certs_held = transform_yes_no(X[['certs_held']])
+    second_pilot = transform_yes_no(X[['second_pilot']])
+    site_seeing = transform_yes_no(X[['site_seeing']])
+    air_medical = transform_yes_no(X[['air_medical']])
 
-    # transform_gender -G
 
-    # transform_type_insp -A
+    crew_sex = transform_gender(X[['crew_sex']])
 
-    # transform_type_fly -G
+    # transform_type_insp -G
+    type_last_insp = transform_type_insp(X[['type_last_insp']])
 
-    # transform_eng_mfgr -A
+    type_fly = transform_type_fly(X[['type_fly']])
 
-    # transform_far_part -A
+    # transform_eng_mfgr -
+    eng_mfgr = transform_eng_mfgr(X[['eng_mfgr']])
+
+    X = transform_far_part(X[['far_part']])
 
     # transform_acft_make -G
+    acft_make = transform_acft_make(X[['acft_make']])
 
     # transform_fixed_retractable -G
+    fixed_retractable = transform_fixed_retractable(X[['fixed_retractable']])
 
-    # transform_acft_category -A
+    # transform_acft_category -G
+    acft_category = transform_acft_category(X[['acft_category']])
 
-    # transform_homebuilt -G
+    homebuilt = transform_yes_no(X[['homebuilt']])
 
     # transform_crew_category -A
 
     # transform_eng_type -L
+    eng_type = transform_eng_type(X[['eng_type']])
 
     # transform_carb_fuel_injection -L
+    carb_fuel_injection = transform_carb_fuel_injection(X[['carb_fuel_injection']])
 
     # transform_dprt_dest_apt_id -L
 
@@ -42,6 +53,23 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     # transform_pc_professional -L
 
-    X_processed = X.copy()
+
+
+    X_processed = pd.concat([
+        certs_held,
+        second_pilot,
+        site_seeing,
+        air_medical,
+        crew_sex,
+        type_fly,
+        acft_make,
+        fixed_retractable,
+        homebuilt,
+        type_last_insp,
+        eng_mfgr,
+        acft_category,
+        eng_type,
+        carb_fuel_injection,
+    ], axis=1)
 
     return X_processed
