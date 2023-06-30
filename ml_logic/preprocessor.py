@@ -11,10 +11,12 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses the features of the cleaned dataset."""
 
     certs_held = transform_yes_no(X[['certs_held']])
-    second_pilot = transform_yes_no(X[['second_pilot']])
-    site_seeing = transform_yes_no(X[['site_seeing']])
-    air_medical = transform_yes_no(X[['air_medical']])
 
+    second_pilot = transform_yes_no(X[['second_pilot']])
+
+    site_seeing = transform_yes_no(X[['site_seeing']])
+
+    air_medical = transform_yes_no(X[['air_medical']])
 
     crew_sex = transform_gender(X[['crew_sex']])
 
@@ -54,17 +56,21 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
         site_seeing,
         air_medical,
         crew_sex,
+        type_last_insp,
         type_fly,
+        eng_mfgr,
         far_part,
         acft_make,
         fixed_retractable,
+        acft_category,
         homebuilt,
         crew_cat,
-        type_last_insp,
-        eng_mfgr,
-        acft_category,
         eng_type,
         carb_fuel_injection,
+        dprt_apt_id,
+        dest_apt_id,
+        flt_plan_filed,
+        pc_profession,
     ], axis=1)
 
     return X_processed
