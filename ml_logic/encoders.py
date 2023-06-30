@@ -159,7 +159,7 @@ def transform_eng_type(X: pd.DataFrame) -> pd.DataFrame:
 
     ohe_eng_type = OneHotEncoder(sparse_output=False, min_frequency=500).fit(X[['eng_type']])
     eng_type_encoded = ohe_eng_type.transform(X[['eng_type']])
-    return eng_type_encoded
+    return pd.DataFrame(eng_type_encoded, columns=ohe_eng_type.get_feature_names_out())
 
 def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms carb_fuel_injection using OHE."""
@@ -167,7 +167,7 @@ def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
     ohe_carb_fuel_injection = OneHotEncoder(sparse_output=False).fit(X[['carb_fuel_injection']])
     carb_fuel_injection_encoded = ohe_carb_fuel_injection.transform(X[['carb_fuel_injection']])
 
-    return carb_fuel_injection_encoded
+    return pd.DataFrame(carb_fuel_injection_encoded, columns=ohe_carb_fuel_injection.get_feature_names_out())
 
 def transform_dprt_dest_apt_id(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms certs_held using Custom functions."""

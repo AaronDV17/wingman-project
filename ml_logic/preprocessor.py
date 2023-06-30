@@ -42,8 +42,10 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
     # transform_crew_category -A
 
     # transform_eng_type -L
+    eng_type = transform_eng_type(X[['eng_type']])
 
     # transform_carb_fuel_injection -L
+    carb_fuel_injection = transform_carb_fuel_injection(X[['carb_fuel_injection']])
 
     # transform_dprt_dest_apt_id -L
 
@@ -66,6 +68,8 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
         type_last_insp,
         eng_mfgr,
         acft_category,
+        eng_type,
+        carb_fuel_injection,
     ], axis=1)
 
     return X_processed
