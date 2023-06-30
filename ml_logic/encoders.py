@@ -24,8 +24,10 @@ def transform_type_insp(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
     ohe = OneHotEncoder(sparse_output=False, drop='if_binary')
+    ohe.fit(X)
+    type_insp_encoded = ohe.transform(X)
 
-    return ohe.fit_transform(X)
+    return pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names())
 
 def transform_type_fly(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms type_fly using Custom function."""
@@ -43,7 +45,7 @@ def general_encoder(X, feature: str, drop=None, min_frequency=None, max_categori
 
     ohe = OneHotEncoder(sparse_output=False, drop=drop, min_frequency=min_frequency, max_categories=max_categories).fit(X[[feature]])
     feature_encoded = ohe.transform(X[[feature]])
-    return feature_encoded
+    return pd.DataFrame(feature_encoded, columns=ohe.get_feature_names())
 
 def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_mfgr using Custom function."""
@@ -166,7 +168,7 @@ def transform_eng_type(X: pd.DataFrame) -> pd.DataFrame:
 
     ohe_eng_type = OneHotEncoder(sparse_output=False, min_frequency=500).fit(X[['eng_type']])
     eng_type_encoded = ohe_eng_type.transform(X[['eng_type']])
-    return eng_type_encoded
+    return pd.DataFrame(eng_type_encoded, columns=ohe_eng_type.get_feature_names_out())
 
 def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms carb_fuel_injection using OHE."""
@@ -174,7 +176,7 @@ def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
     ohe_carb_fuel_injection = OneHotEncoder(sparse_output=False).fit(X[['carb_fuel_injection']])
     carb_fuel_injection_encoded = ohe_carb_fuel_injection.transform(X[['carb_fuel_injection']])
 
-    return carb_fuel_injection_encoded
+    return pd.DataFrame(carb_fuel_injection_encoded, columns=ohe_carb_fuel_injection.get_feature_names_out())
 
 def transform_dprt_dest_apt_id(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms certs_held using Custom functions."""
