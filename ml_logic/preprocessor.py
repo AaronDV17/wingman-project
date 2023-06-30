@@ -42,9 +42,9 @@ def preprocess_features(X: pd.DataFrame) -> pd.DataFrame:
 
     carb_fuel_injection = transform_carb_fuel_injection(X[['carb_fuel_injection']])
 
-    dprt_apt_id = transform_dprt_dest_apt_id(X[['dprt_apt_id']])
+    dprt_apt_id = transform_dprt_dest_apt_id(X[['dprt_apt_id']], 'dprt_apt_id')
 
-    dest_apt_id = transform_dprt_dest_apt_id(X[['dest_apt_id']])
+    dest_apt_id = transform_dprt_dest_apt_id(X[['dest_apt_id']], 'dest_apt_id')
 
     flt_plan_filed = transform_flt_filed(X[['flt_plan_filed']])
 

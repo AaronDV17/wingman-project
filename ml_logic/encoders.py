@@ -23,20 +23,23 @@ def transform_gender(X: pd.DataFrame) -> pd.DataFrame:
 def transform_type_insp(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
-    ohe = OneHotEncoder(sparse_output=False, drop='if_binary')
-    ohe.fit(X)
+    ohe = OneHotEncoder(sparse_output=False, drop='if_binary').fit(X)
+
     type_insp_encoded = ohe.transform(X)
 
-    return pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names())
+    return pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names_out())
 
 def transform_type_fly(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms type_fly using Custom function."""
 
     wingman_data_enc = X
+
     top_9_categories = wingman_data_enc['type_fly'].value_counts().nlargest(9).index.tolist()
+
     wingman_data_enc[''] = np.where(wingman_data_enc['type_fly'].isin(top_9_categories), wingman_data_enc['type_fly'], 'Other')
+
     type_fly_encoded = pd.get_dummies(wingman_data_enc, columns=[''], dtype=int)
-    type_fly_encoded = type_fly_encoded.drop(columns = ['type_fly', 'eng_mfgr'])
+    type_fly_encoded = type_fly_encoded.drop(columns = ['type_fly'])
 
     return type_fly_encoded
 
@@ -45,7 +48,7 @@ def general_encoder(X, feature: str, drop=None, min_frequency=None, max_categori
 
     ohe = OneHotEncoder(sparse_output=False, drop=drop, min_frequency=min_frequency, max_categories=max_categories).fit(X[[feature]])
     feature_encoded = ohe.transform(X[[feature]])
-    return pd.DataFrame(feature_encoded, columns=ohe.get_feature_names())
+    return pd.DataFrame(feature_encoded, columns=ohe.get_feature_names_out())
 
 def transform_eng_mfgr(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms eng_mfgr using Custom function."""
@@ -140,7 +143,8 @@ def transform_acft_category(X: pd.DataFrame) -> pd.DataFrame:
 
     ohe_acft_category = OneHotEncoder(sparse_output=False, min_frequency=1000).fit(X[['acft_category']])
     acft_category_encoded = ohe_acft_category.transform(X[['acft_category']])
-    return acft_category_encoded
+
+    return pd.DataFrame(acft_category_encoded, columns=ohe_acft_category.get_feature_names_out())
 
 def transform_homebuilt(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms homebuilt using OHE."""
@@ -178,11 +182,12 @@ def transform_carb_fuel_injection(X: pd.DataFrame) -> pd.DataFrame:
 
     return pd.DataFrame(carb_fuel_injection_encoded, columns=ohe_carb_fuel_injection.get_feature_names_out())
 
-def transform_dprt_dest_apt_id(X: pd.DataFrame) -> pd.DataFrame:
+def transform_dprt_dest_apt_id(X: pd.DataFrame, field: str) -> pd.DataFrame:
     """Transforms certs_held using Custom functions."""
 
-    X.loc[X['dest_apt_id'] == 'NONE', 'dest_apt_id'], X.loc[X['dest_apt_id'] == 'PVT', 'dest_apt_id'] = 0, 0 # None and PVT -> 0
-    X.loc[X['dest_apt_id'] !=0, 'dest_apt_id'] = 1 # values != 0 -> 1
+    X[field] = X[field].where(X[field] != 'NONE', 0)
+    X[field] = X[field].where(X[field] != 'PVT', 0)
+    X[field] = X[field].where(X[field] == 0, 1)
 
     return X
 
@@ -197,15 +202,13 @@ def transform_pc_profession(X: pd.DataFrame) -> pd.DataFrame:
 
 def transform_flt_filed(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms flt_plan_filed using Custom functions and OHE."""
-    X['flt_plan_filed'].replace('UNK', 'NONE', inplace=True)
-    X['flt_plan_filed'].replace('VFIF', 'IFR', inplace=True)
-    X['flt_plan_filed'].replace(['CVFR', 'MVFR'], 'VFR', inplace=True)
 
+    X.replace('UNK', 'NONE', inplace=True)
+    X.replace('VFIF', 'IFR', inplace=True)
+    X.replace(['CVFR', 'MVFR'], 'VFR', inplace=True)
 
-    ohe = OneHotEncoder(sparse_output=True)
+    ohe = OneHotEncoder(sparse_output=False).fit(X)
 
-    ohe.fit(X[['flt_plan_filed']])
-
-    ohe_df = pd.DataFrame(ohe.transform(df[['flt_plan_filed']]), columns=ohe.get_feature_names_out())
+    ohe_df = pd.DataFrame(ohe.transform(X), columns=ohe.get_feature_names_out())
 
     return ohe_df
