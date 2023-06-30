@@ -187,28 +187,25 @@ def transform_dprt_dest_apt_id(X: pd.DataFrame) -> pd.DataFrame:
     return X
 
 
-def transform_pc_professional(X: pd.DataFrame) -> pd.DataFrame:
-    """Transforms pc_professional using Custom functions."""
+def transform_pc_profession(X: pd.DataFrame) -> pd.DataFrame:
+    """Transforms pc_profession using Custom functions."""
 
     X['pc_profession'].replace('UNK', 'No', inplace=True)
     X['pc_profession'].replace(['Yes', 'No'], [1, 0], inplace=True)
 
     return X
 
-def transform_flt_filed(df):
-    df['flt_plan_filed'].replace('UNK', 'NONE', inplace=True)
-    df['flt_plan_filed'].replace('VFIF', 'IFR', inplace=True)
-    df['flt_plan_filed'].replace(['CVFR', 'MVFR'], 'VFR', inplace=True)
+def transform_flt_filed(X: pd.DataFrame) -> pd.DataFrame:
+    """Transforms flt_plan_filed using Custom functions and OHE."""
+    X['flt_plan_filed'].replace('UNK', 'NONE', inplace=True)
+    X['flt_plan_filed'].replace('VFIF', 'IFR', inplace=True)
+    X['flt_plan_filed'].replace(['CVFR', 'MVFR'], 'VFR', inplace=True)
 
-    cat = list(df['flt_plan_filed'].unique())
 
-    ohe = OneHotEncoder()
-    ohe_df = pd.DataFrame(ohe.fit_transform(df[['flt_plan_filed']]).toarray())
-    ohe_df.columns = cat
-    ohe_df
-    df.drop(columns='flt_plan_filed', inplace=True)
-    df = pd.concat([df, ohe_df], axis=1)
+    ohe = OneHotEncoder(sparse_output=True)
 
-    df['pc_profession'].replace('UNK', 'No', inplace=True)
-    df['pc_profession'].replace(['Yes', 'No'], [1, 0], inplace=True)
-    return df
+    ohe.fit(X[['flt_plan_filed']])
+
+    ohe_df = pd.DataFrame(ohe.transform(df[['flt_plan_filed']]), columns=ohe.get_feature_names_out())
+
+    return ohe_df
