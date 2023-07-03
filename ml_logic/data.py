@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import seaborn as sns
+
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -18,15 +18,16 @@ def clean_data(X: pd.DataFrame) -> pd.DataFrame:
     wingman_data = X.drop_duplicates()
 
     ## Filter out rows to only contain 'HP' values in 'hp_or_lbs' column
-    mask = wingman_df['hp_or_lbs'] == 'HP'
-    wingman_df = wingman_df[mask]
+    mask = wingman_data['hp_or_lbs'] == 'HP'
+    wingman_data = wingman_data[mask]
 
-    ## drop rows and columns
+    ## Drop rows
     wingman_data_cleaned = wingman_data.dropna(subset=['acft_make', 'acft_model', 'acft_category'], how='any')
 
+    ## Drop columns
     wingman_data_cleaned.drop([
         'afm_hrs_last_insp', 'elt_install', 'elt_type', 'oper_dba', 'crew_tox_perf', 'mr_faa_med_certf', 'eng_model',
-        'propeller_type', 'available_restraint', 'eng_no', 'hp_or_lbs'
+        'propeller_type', 'available_restraint', 'eng_no', 'hp_or_lbs', 'acft_model'
         ], axis=1, inplace=True)
 
     ## imputing
@@ -78,14 +79,18 @@ def clean_data(X: pd.DataFrame) -> pd.DataFrame:
     wingman_data_preproc = preprocessor.transform(wingman_data_cleaned)
 
     ## merging datasets
-    c = ['dprt_time', 'cert_max_gr_wt', 'afm_hrs', 'total_seats', 'num_eng', 'type_last_insp', 'second_pilot', 'site_seeing', 'air_medical', 'crew_sex',
+    c = ['dprt_time', 'cert_max_gr_wt', 'afm_hrs', 'total_seats', 'power_units', 'num_eng', 'type_last_insp', 'second_pilot', 'site_seeing', 'air_medical', 'crew_sex',
         'certs_held', 'dprt_apt_id', 'dest_apt_id', 'flt_plan_filed', 'pc_profession', 'eng_type', 'carb_fuel_injection', 'type_fly', 'eng_mfgr']
+
     wingman_data_preproc = pd.DataFrame(wingman_data_preproc, columns=c)
+
     wingman_data_cleaned = wingman_data_cleaned.drop(columns=c)
+
     wingman_data_cl_imp = pd.merge(wingman_data_cleaned, wingman_data_preproc, left_index=True, right_index=True)
 
     ## fixing dtypes
     wingman_data_cl_imp['total_seats'] = wingman_data_cl_imp['total_seats'].astype('int64')
+    wingman_data_cl_imp['power_units'] = wingman_data_cl_imp['power_units'].astype('int64')
     wingman_data_cl_imp['num_eng'] = wingman_data_cl_imp['num_eng'].astype('int64')
     wingman_data_cl_imp['dprt_time'] = wingman_data_cl_imp['dprt_time'].astype('int64')
     wingman_data_cl_imp['cert_max_gr_wt'] = wingman_data_cl_imp['cert_max_gr_wt'].astype('int64')
