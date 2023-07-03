@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
 
@@ -11,7 +12,6 @@ def transform_yes_no(X: pd.DataFrame) -> pd.DataFrame:
     yes_no_encoded = pd.DataFrame(bin_encoder_1.fit_transform(X), columns=X.columns)
 
     yes_no_encoded.index = X.index
-
 
     return yes_no_encoded
 
@@ -30,9 +30,7 @@ def transform_type_insp(X: pd.DataFrame) -> pd.DataFrame:
     """Transforms Inspection types:ANNL, 100H, COND, UNK, COAW, AAIP  using OHE."""
 
     ohe = OneHotEncoder(sparse_output=False, drop='if_binary').fit(X)
-
     type_insp_encoded = ohe.transform(X)
-
     type_insp_encoded = pd.DataFrame(type_insp_encoded, columns=ohe.get_feature_names_out())
 
     type_insp_encoded.index = X.index

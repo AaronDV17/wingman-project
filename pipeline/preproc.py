@@ -5,8 +5,6 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import LabelEncoder
 
-
-
 def preprocess(data, id='id', target='eventsoe_no'):
 
     data.set_index(id, inplace=True)
