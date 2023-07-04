@@ -86,8 +86,7 @@ def clean_data(X: pd.DataFrame) -> pd.DataFrame:
         ]
     )
 
-    preprocessor.fit(wingman_data_cleaned)
-    wingman_data_preproc = preprocessor.transform(wingman_data_cleaned)
+    wingman_data_preproc = preprocessor.fit_transform(wingman_data_cleaned)
 
     ## Merging Datasets
     c = ['dprt_time', 'cert_max_gr_wt', 'afm_hrs', 'total_seats', 'power_units', 'num_eng', 'type_last_insp', 'second_pilot', 'site_seeing', 'air_medical', 'crew_sex',
