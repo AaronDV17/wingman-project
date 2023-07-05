@@ -8,4 +8,7 @@ matplotlib
 seaborn
 scikit-learn
 bigquery
-google-cloud-storages
+google-cloud-storage
+google-cloud-bigquery
+db-dtypes
+pyarrow

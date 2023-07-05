@@ -1,6 +1,9 @@
 raw_data/
 data/
-
+baseline/.data_cache/
+ml_logic/__pycache__/
+custom_functions/__pycache__/
+notebooks/__pycache__/
 typora/
 notebooks-pvt/
 
