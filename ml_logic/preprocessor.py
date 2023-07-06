@@ -3,8 +3,7 @@ import pandas as pd
 
 from encoders import *
 
-
-def preprocess_features(X: pd.DataFrame, target_columns: list) -> pd.DataFrame:
+def preprocess_features(X: pd.DataFrame, target_columns=[]) -> pd.DataFrame:
     """
     Preprocesses the features of the cleaned dataset.
     """

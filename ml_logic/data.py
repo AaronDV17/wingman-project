@@ -9,6 +9,10 @@ from sklearn.pipeline import Pipeline
 from google.cloud import bigquery
 from pathlib import Path
 
+import sys
+
+sys.path.insert(0, '..')
+
 from params import *
 
 def clean_data(X: pd.DataFrame) -> pd.DataFrame:
