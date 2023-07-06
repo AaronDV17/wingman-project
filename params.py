@@ -24,5 +24,5 @@ PREFECT_LOG_LEVEL = os.environ.get("PREFECT_LOG_LEVEL")
 # GCR_MEMORY = os.environ.get("GCR_MEMORY")
 
 ##################  CONSTANTS  #####################
-LOCAL_DATA_PATH = os.path.join(os.path.expanduser('~'), "code", "AaronDV17", "wingman-project", ".data_cache")
-LOCAL_REGISTRY_PATH =  os.path.join(os.path.expanduser('~'), "code", "AaronDV17", "wingman-project", ".training_outputs")
+LOCAL_DATA_PATH = os.path.join(os.getcwd(), ".data_cache")
+LOCAL_REGISTRY_PATH =  os.path.join(os.getcwd(), ".training_outputs")
